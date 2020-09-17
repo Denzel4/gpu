@@ -1,0 +1,224 @@
+@startuml
+
+skinparam defaultFontName Courier
+
+Class Agent {
+    INTEGER         ★ id           
+    VARCHAR[255]    ⚪ brightness   
+    INTEGER         ⚪ camera_id    
+    VARCHAR[255]    ⚪ description  
+    VARCHAR[255]    ⚪ environment  
+    INTEGER         ⚪ model_id     
+    VARCHAR[255]    ⚪ project      
+    VARCHAR[255]    ⚪ random_crop  
+    VARCHAR[255]    ⚪ random_flip  
+    VARCHAR[255]    ⚪ random_rotate
+    VARCHAR[255]    ⚪ session      
+    DATETIME        ⚪ updated_on   
+    VARCHAR[255]    ⚪ user         
+    from_json()                    
+    to_dictionary()                
+}
+
+Class Annotation {
+    INTEGER         ★ id          
+    INTEGER         ⚪ area        
+    VARCHAR[255]    ⚪ bbox        
+    INTEGER         ⚪ category_id 
+    BOOLEAN         ⚪ ignore      
+    INTEGER         ⚪ image_id    
+    BOOLEAN         ⚪ iscrowd     
+    VARCHAR[255]    ⚪ segmentation
+    DATETIME        ⚪ updated_on  
+    from_json()                   
+    to_dictionary()               
+}
+
+Class Attribute {
+    INTEGER         ★ id            
+    VARCHAR[255]    ⚪ attribute_name
+    INTEGER         ⚪ dataset       
+    VARCHAR[255]    ⚪ description   
+    DATETIME        ⚪ updated_on    
+    INTEGER         ⚪ value         
+    from_json()                     
+    to_dictionary()                 
+}
+
+Class BlacklistToken {
+    INTEGER             ★ id            
+    DATETIME            ⚪ blacklisted_on
+    VARCHAR[500]        ⚪ token         
+    from_json()                         
+    from_partial_json()                 
+    to_dictionary()                     
+}
+
+Class Camera {
+    INTEGER         ★ id            
+    INTEGER         ☆ agent_id      
+    INTEGER         ☆ models_id     
+    VARCHAR[255]    ⚪ camera_id     
+    VARCHAR[255]    ⚪ camera_type   
+    VARCHAR[255]    ⚪ color         
+    BOOLEAN         ⚪ current_status
+    VARCHAR[255]    ⚪ exposure      
+    VARCHAR[255]    ⚪ frame_rate    
+    VARCHAR[255]    ⚪ image_size_C  
+    BOOLEAN         ⚪ image_size_H  
+    VARCHAR[255]    ⚪ image_size_W  
+    VARCHAR[255]    ⚪ orientation   
+    FLOAT           ⚪ resolution    
+    BOOLEAN         ⚪ shutter_speed 
+    VARCHAR[255]    ⚪ spot_name     
+    VARCHAR[255]    ⚪ threshold     
+    DATETIME        ⚪ updated_on    
+    VARCHAR[255]    ⚪ weight_file   
+    +               agent           
+    +               model           
+    from_json()                     
+    to_dictionary()                 
+}
+
+Class Category {
+    INTEGER         ★ id           
+    VARCHAR[255]    ⚪ category_name
+    INTEGER         ⚪ dataset      
+    VARCHAR[255]    ⚪ description  
+    DATETIME        ⚪ updated_on   
+    INTEGER         ⚪ value        
+    from_json()                    
+    to_dictionary()                
+}
+
+Class Dataset {
+    INTEGER         ★ id        
+    VARCHAR[255]    ⚪ ai_agent  
+    VARCHAR[255]    ⚪ dataset   
+    DATETIME        ⚪ updated_on
+    INTEGER         ⚪ users     
+    VARCHAR[255]    ⚪ version   
+    from_json()                 
+    to_dictionary()             
+}
+
+Class Image {
+    INTEGER         ★ id             
+    INTEGER         ☆ annotation_id  
+    INTEGER         ☆ attributes_id  
+    INTEGER         ☆ categories_id  
+    INTEGER         ☆ dataset_id     
+    VARCHAR[255]    ⚪ annotation_path
+    VARCHAR[255]    ⚪ filename       
+    VARCHAR[255]    ⚪ flagging       
+    FLOAT           ⚪ height         
+    VARCHAR[255]    ⚪ image_path     
+    VARCHAR[255]    ⚪ license        
+    DATETIME        ⚪ updated_on     
+    FLOAT           ⚪ width          
+    +               annotation       
+    +               attribute        
+    +               category         
+    +               dataset          
+    from_json()                      
+    to_dictionary()                  
+}
+
+Class Inference {
+    INTEGER         ★ id        
+    INTEGER         ☆ agent_id  
+    INTEGER         ☆ camera_id 
+    INTEGER         ☆ model_id  
+    FLOAT           ⚪ confidence
+    VARCHAR[255]    ⚪ dataset   
+    VARCHAR[255]    ⚪ file_name 
+    VARCHAR[255]    ⚪ file_path 
+    VARCHAR[255]    ⚪ label     
+    VARCHAR[255]    ⚪ tag       
+    DATETIME        ⚪ updated_on
+    from_json()                 
+    to_dictionary()             
+}
+
+Class Location {
+    INTEGER         ★ id      
+    VARCHAR[13]     ⚪ location
+    from_json()               
+    to_dictionary()           
+}
+
+Class Models {
+    INTEGER         ★ id        
+    VARCHAR[255]    ⚪ camera_id 
+    VARCHAR[255]    ⚪ dataset   
+    VARCHAR[255]    ⚪ model_name
+    VARCHAR[255]    ⚪ model_path
+    DATETIME        ⚪ updated_on
+    from_json()                 
+    to_dictionary()             
+}
+
+Class Role {
+    INTEGER         ★ id  
+    VARCHAR[9]      ⚪ name
+    +               users 
+    from_json()           
+    to_dictionary()       
+}
+
+Class User {
+    INTEGER                                ★ id              
+    INTEGER                                ☆ location_id     
+    BOOLEAN                                ⚪ admin_validation
+    VARCHAR[255]                           ⚪ company         
+    BOOLEAN                                ⚪ confirmed       
+    DATETIME                               ⚪ confirmed_on    
+    DATETIME                               ⚪ current_login_at
+    VARCHAR[255]                           ⚪ email           
+    VARCHAR[255] COLLATE "utf8_unicode_ci" ⚪ first_name      
+    VARCHAR[255]                           ⚪ language        
+    DATETIME                               ⚪ last_login_at   
+    VARCHAR[255] COLLATE "utf8_unicode_ci" ⚪ last_name       
+    VARCHAR[255]                           ⚪ password        
+    DATETIME                               ⚪ registered_on   
+    VARCHAR[255]                           ⚪ title           
+    VARCHAR[255] COLLATE "utf8_unicode_ci" ⚪ username        
+    +                                      location          
+    +                                      roles             
+    from_json()                                              
+    from_partial_json()                                      
+    to_dictionary()                                          
+}
+
+Class roles_users {
+    INTEGER ☆ role_id
+    INTEGER ☆ user_id
+}
+
+Camera <--o Agent: agent_id
+
+Camera <--o Models: models_id
+
+Image <--o Dataset: dataset_id
+
+Image <--o Attribute: attributes_id
+
+Image <--o Annotation: annotation_id
+
+Image <--o Category: categories_id
+
+Inference <--o Agent: agent_id
+
+Inference <--o Models: model_id
+
+Inference <--o Camera: camera_id
+
+User <--o Location: location_id
+
+roles_users <--o User: user_id
+
+roles_users <--o Role: role_id
+
+right footer generated by sadisplay v0.4.9
+
+@enduml
